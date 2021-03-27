@@ -1,8 +1,6 @@
-# X-Ray-disease-detection
+# X-Ray disease detection web app
 
-Under developement
-
-[Link to the app](https://arcane-thicket-47996.herokuapp.com)
+[Link to the app (under developement)](https://arcane-thicket-47996.herokuapp.com)
 
 
 ## Building the app
