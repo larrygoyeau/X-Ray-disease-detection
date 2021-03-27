@@ -68,8 +68,9 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
+            '''
             im = cv2.imread(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            im = cv2.resize(im,(700,700))
             outputs = predictor(im)
             v = Visualizer(im[:, :, ::-1],
                    metadata=balloon_metadata, 
@@ -78,7 +79,7 @@ def upload_file():
             )
             v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
             cv2.imwrite(os.path.join(app.config['UPLOAD_FOLDER'], filename), v.get_image()[:, :, ::-1])
-
+            '''
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     else:
