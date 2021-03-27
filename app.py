@@ -52,6 +52,8 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    for file in os.listdir(app.config['UPLOAD_FOLDER']):
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file))
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
