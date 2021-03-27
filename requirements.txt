@@ -7,8 +7,6 @@ click==7.1.2
 cloudpickle==1.6.0
 cycler==0.10.0
 Cython==0.29.22
-torch==1.8.1
-torchvision==0.9.1
 Flask==0.10.1
 future==0.18.2
 fvcore @ git+https://github.com/facebookresearch/fvcore@8b1936e016f22e45e2711bdd88fe118c0f01c1fc
@@ -51,4 +49,5 @@ typing-extensions==3.7.4.3
 urllib3==1.26.4
 Werkzeug==1.0.1
 yacs==0.1.8
+googledrivedownloader==0.4
 detectron2 @ git+https://github.com/facebookresearch/detectron2.git@e768e1bbd1ce22448201f9436adf5c598d5b0078
