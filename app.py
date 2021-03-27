@@ -70,7 +70,6 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             im = cv2.imread(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            im = cv2.resize(im,(640,640))
             outputs = predictor(im)
             v = Visualizer(im[:, :, ::-1],
                    metadata=balloon_metadata, 
