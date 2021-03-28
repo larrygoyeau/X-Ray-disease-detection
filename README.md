@@ -1,17 +1,15 @@
-# X-Ray-disease-detection
+# X-Ray disease detection web app
 
-Under developement
-
-[Link to the app](https://arcane-thicket-47996.herokuapp.com)
+[Link to the app (under development)](https://arcane-thicket-47996.herokuapp.com)
 
 
-## Building the app
+### Building the app
 
 ```
 docker build -t x-ray-disease-detection .
 ```
 
-## Running the app
+### Running the app
 
 ```
 docker run -p 5000:5000 x-ray-disease-detection
