@@ -86,7 +86,7 @@ def upload_file():
     else:
         return '''
         <!doctype html>
-        <title>Upload new File</title>
+        <title>Upload new Fileeeeee</title>
         <h1>Upload new File</h1>
         <form method=post enctype=multipart/form-data>
             <input type=file name=file>
