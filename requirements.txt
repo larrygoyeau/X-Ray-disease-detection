@@ -50,4 +50,3 @@ urllib3==1.26.4
 Werkzeug==1.0.1
 yacs==0.1.8
 googledrivedownloader==0.4
-detectron2 @ git+https://github.com/facebookresearch/detectron2.git@e768e1bbd1ce22448201f9436adf5c598d5b0078
