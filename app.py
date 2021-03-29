@@ -9,7 +9,7 @@ from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 from detectron2.utils.visualizer import Visualizer
 from detectron2.utils.visualizer import ColorMode
-
+'''
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 14  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
@@ -38,6 +38,7 @@ MetadataCatalog.get("vinbigdata").set(thing_classes=['Aortic enlargement',
                                                            'Pulmonary fibrosis',
                                                            'No finding'])
 balloon_metadata = MetadataCatalog.get("vinbigdata")
+'''
 
 UPLOAD_FOLDER = 'target/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
