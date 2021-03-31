@@ -1,3 +1,3 @@
 flask
-googledrivedownloader==0.4
+googledrivedownloader
 opencv-python-headless==4.5.1.48
