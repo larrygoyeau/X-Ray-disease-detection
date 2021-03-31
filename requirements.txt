@@ -7,7 +7,7 @@ click==7.1.2
 cloudpickle==1.6.0
 cycler==0.10.0
 Cython==0.29.22
-Flask==0.10.1
+Flask
 future==0.18.2
 fvcore @ git+https://github.com/facebookresearch/fvcore@8b1936e016f22e45e2711bdd88fe118c0f01c1fc
 google-auth==1.28.0
