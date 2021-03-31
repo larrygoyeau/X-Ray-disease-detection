@@ -1,6 +1,6 @@
 # X-Ray disease detection web app
 
-[Link to the app (under development)](http://xray.lgoyeau.com:5000/)
+[Link to the app (under development)](http://xray.lgoyeau.com/)
 
 
 ### Building the app
