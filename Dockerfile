@@ -12,4 +12,6 @@ RUN python model.py
 
 COPY . .
 
+COPY templates ./
+
 CMD [ "python", "./app.py" ]

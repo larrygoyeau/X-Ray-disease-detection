@@ -1,7 +1,13 @@
-from flask import Flask, flash, request, redirect, url_for, send_from_directory
-from werkzeug.utils import secure_filename
+from flask import Flask, request, redirect, url_for, render_template
+from werkzeug.datastructures import CombinedMultiDict
+from wtforms import Form, ValidationError
+from flask_wtf.file import FileField
+import tempfile
 import os
-import cv2
+import io
+import base64
+from PIL import Image
+from numpy import asarray
 import detectron2
 from detectron2 import model_zoo
 from detectron2.engine import DefaultPredictor
@@ -19,7 +25,7 @@ cfg.TEST.AUG.FLIP=False
 cfg.MODEL.WEIGHTS='/opt/model_final.pth'
 #NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
 cfg.MODEL.DEVICE="cpu"
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.3   # set a custom testing threshold
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.05   # set a custom testing threshold
 predictor = DefaultPredictor(cfg)
 
 MetadataCatalog.get("vinbigdata").set(thing_classes=['Aortic enlargement',
@@ -37,67 +43,58 @@ MetadataCatalog.get("vinbigdata").set(thing_classes=['Aortic enlargement',
                                                            'Pneumothorax',
                                                            'Pulmonary fibrosis',
                                                            'No finding'])
-balloon_metadata = MetadataCatalog.get("vinbigdata")
+X_ray_metadata = MetadataCatalog.get("vinbigdata")
 
-UPLOAD_FOLDER = 'target/uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-    for f in os.listdir(app.config['UPLOAD_FOLDER']):
-        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], f))
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            
-            im = cv2.imread(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            im = cv2.resize(im,(700,700))
-            outputs = predictor(im)
-            v = Visualizer(im[:, :, ::-1],
-                   metadata=balloon_metadata, 
+app = Flask(__name__)
+
+def encode_image(image):
+  image_buffer = io.BytesIO()
+  image.save(image_buffer, format='PNG')
+  imgstr = 'data:image/png;base64,{:s}'.format(
+      base64.b64encode(image_buffer.getvalue()).decode().replace("'", ""))
+  return imgstr
+
+@app.route('/')
+def upload():
+  return render_template('upload.html', result={})
+
+@app.route('/post', methods=['GET', 'POST'])
+def post():
+  if request.method == 'POST':
+    file = request.files['file']
+    if not allowed_file(file.filename):
+        result={}
+        result['original'] = 'File extension should be: %s' % ', '.join(ALLOWED_EXTENSIONS)
+        return render_template('upload.html', result=result)
+
+    with tempfile.NamedTemporaryFile() as temp:
+      file.save(temp.name)
+      temp.flush()
+      image = Image.open(temp.name).convert('RGB')
+      
+      image = asarray(image)
+      outputs = predictor(image)
+      v = Visualizer(image[:, :, ::-1],
+                   metadata=X_ray_metadata, 
                    scale=0.8, 
                    instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
-            )
-            v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-            cv2.imwrite(os.path.join(app.config['UPLOAD_FOLDER'], filename), v.get_image()[:, :, ::-1])
-            
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    else:
-        return '''
-        <!doctype html>
-        <title>Upload new File</title>
-        <h1>Upload new File</h1>
-        <form method=post enctype=multipart/form-data>
-            <input type=file name=file>
-            <input type=submit value=Upload>
-        </form>
-        '''
+                   )
+      v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+      image=v.get_image()[:, :, ::-1]
+      image=Image.fromarray(image, 'RGB')
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+      result = {}
+      result['original'] = encode_image(image.copy())
+
+    return render_template('upload.html', result=result)
+  else:
+    return redirect(url_for('upload'))
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
