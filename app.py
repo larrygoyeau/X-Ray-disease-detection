@@ -25,7 +25,7 @@ cfg.TEST.AUG.FLIP=False
 cfg.MODEL.WEIGHTS='/opt/model_final.pth'
 #NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
 cfg.MODEL.DEVICE="cpu"
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.05   # set a custom testing threshold
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.075   # set a custom testing threshold
 predictor = DefaultPredictor(cfg)
 
 MetadataCatalog.get("vinbigdata").set(thing_classes=['Aortic enlargement',
