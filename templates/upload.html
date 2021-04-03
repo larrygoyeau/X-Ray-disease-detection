@@ -34,9 +34,11 @@
     <hr>
 
     <div id="result">
-      {% if result|length > 0 and not 'File extension should be:' in result['original']%}
+      {% if result|length > 0 and not ('File' in result['original'] or 'disease' in result['original']) %}
         <div><img id="photo" src="{{ result['original'] }}" align="left" hspace="15" vspace="15" width="600" height="600"></div>
       {% elif 'File extension should be:' in result['original'] %}
+        <h1>{{ result['original'] }}</h1>
+      {% elif 'No disease' in result['original'] %}
         <h1>{{ result['original'] }}</h1>
       {% endif %}
     </div>

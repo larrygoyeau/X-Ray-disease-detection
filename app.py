@@ -18,14 +18,14 @@ from detectron2.utils.visualizer import ColorMode
 
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
-cfg.MODEL.ROI_HEADS.NUM_CLASSES = 14  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = 14  
 cfg.INPUT.RANDOM_FLIP='none'
 cfg.TEST.AUG.FLIP=False
 
 cfg.MODEL.WEIGHTS='/opt/model_final.pth'
-#NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
+
 cfg.MODEL.DEVICE="cpu"
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.05   # set a custom testing threshold
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.1   # set a custom testing threshold
 predictor = DefaultPredictor(cfg)
 
 MetadataCatalog.get("vinbigdata").set(thing_classes=['Aortic enlargement',
@@ -90,7 +90,10 @@ def post():
       image=Image.fromarray(image, 'RGB')
 
       result = {}
-      result['original'] = encode_image(image.copy())
+      if len(outputs['instances'].pred_classes)==0:
+        result['original']='No disease detected'
+      else:
+        result['original'] = encode_image(image.copy())
 
     return render_template('upload.html', result=result)
   else:
