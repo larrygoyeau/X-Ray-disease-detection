@@ -10,6 +10,8 @@
       function WaitDisplay() {
         target = document.getElementById("result");
         target.style.display="none";
+        target = document.getElementById("info");
+        target.style.display="none";
         target = document.getElementById("loading");
         target.style.display="";
         setTimeout(function() {
@@ -27,23 +29,36 @@
       <form id="upload" method=post action={{ url_for('post') }} enctype="multipart/form-data">
         <input type="file" onchange="WaitDisplay();" name=file>
         <label>You can find some test chest X-ray at this link: 
-            <a href="https://drive.google.com/drive/folders/1-Ca-DzpA4pM3moc2_lRQNf5nRUgYVa6k?usp=sharing" target="_blank">Test sample</a></label>
+            <a href="https://drive.google.com/drive/folders/1W9w3MjECfLe2bkGD5-bqyeaCxo6TImti?usp=sharing" target="_blank">Test sample</a></label>
       </form>
     </div>
 
     <hr>
+    {% from "info.html" import render_field %}
 
     <div id="result">
       {% if result|length > 0 and not ('File' in result['original'] or 'disease' in result['original']) %}
         <div><img id="photo" src="{{ result['original'] }}" align="left" hspace="15" vspace="15" width="600" height="600"></div>
+        {{render_field()}}
+        <script>
+          document.getElementById("info").style.position="absolute"
+          document.getElementById("info").style.right="500px"
+        </script>
       {% elif 'File extension should be:' in result['original'] %}
         <h1>{{ result['original'] }}</h1>
+        {{render_field()}}
       {% elif 'No disease' in result['original'] %}
         <h1>{{ result['original'] }}</h1>
+        {{render_field()}}
       {% endif %}
     </div>
+
+    {% if result|length == 0 %}
+      {{ render_field()}}
+    {% endif %}
+
     <div id="loading" style="display:none">
-        <h2>Detecting Objects...</h2>
+        <h2>Detecting Diseases...</h2>
     </div>
 
   </body>
