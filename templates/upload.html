@@ -20,6 +20,24 @@
     
     </script>
 
+<style> 
+  input[type=file] {
+    display: none;
+  }
+  .custom-file-upload {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
+  </style>
+
   </head>
   <body>
 
@@ -27,9 +45,12 @@
     <h3>Upload a chest X-ray</h3>
     <div>
       <form id="upload" method=post action={{ url_for('post') }} enctype="multipart/form-data">
-        <input type="file" onchange="WaitDisplay();" name=file>
-        <label>You can find some test chest X-ray at this link: 
-            <a href="https://drive.google.com/drive/folders/1W9w3MjECfLe2bkGD5-bqyeaCxo6TImti?usp=sharing" target="_blank">Test sample</a></label>
+        <label class="custom-file-upload">
+          <input type="file" onchange="WaitDisplay();" name=file>Choose file </input>
+        </label>
+        <label style="padding-left: 50px;"> You can find some test chest X-ray at this link: 
+            <a href="https://drive.google.com/drive/folders/1W9w3MjECfLe2bkGD5-bqyeaCxo6TImti?usp=sharing" target="_blank">Test sample</a>
+        </label>
       </form>
     </div>
 
