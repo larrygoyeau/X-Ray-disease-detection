@@ -7,14 +7,15 @@ import os
 import io
 import base64
 from PIL import Image
+import cv2
 from numpy import asarray
 import detectron2
 from detectron2 import model_zoo
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
-from detectron2.utils.visualizer import Visualizer
-from detectron2.utils.visualizer import ColorMode
+from visualizer import Visualizer, ColorMode
+from torch import torch
 
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
@@ -80,9 +81,14 @@ def post():
       
       image = asarray(image)
       outputs = predictor(image)
+      w, h, _ =image.shape
+      im_size=700
+      bboxes=outputs['instances'].pred_boxes.tensor
+      outputs['instances'].pred_boxes.tensor=torch.tensor([[box[0]/h, box[1]/w, box[2]/h, box[3]/w] for box in bboxes], device='cpu')*im_size
+      image=cv2.resize(image,(im_size,im_size))
       v = Visualizer(image[:, :, ::-1],
                    metadata=X_ray_metadata, 
-                   scale=0.8, 
+                   scale=0.7, 
                    instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
                    )
       v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
