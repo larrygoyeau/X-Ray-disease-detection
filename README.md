@@ -9,6 +9,8 @@ https://colab.research.google.com/drive/1Gx9JwNFz7LtD0moyVFyPRtl2vfI0vNo8?usp=sh
 
 This web app use Flask for the communication between the server and the client interface. The server is provided by DigitalOcean. 2 GB of RAM is necessary to run the app. No GPU is used for inference, only CPU.
 
+![alt text](https://github.com/larrygoyeau/X-Ray-disease-detection/blob/master/WebApp.png?raw=true)
+
 ### Building the app
 
 ```
