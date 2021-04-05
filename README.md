@@ -2,7 +2,7 @@
 
 [Link to the app](http://xray.lgoyeau.com/)
 
-<a href="http://xray.lgoyeau.com" target="_blank">http://xray.lgoyeau.com</a>
+<a href="lgoyeau" target="_blank">http://xray.lgoyeau.com</a>
 
 This app is based on the method that I used to get my position in the Kaggel [competition for disease detection on X-ray images](https://www.kaggle.com/c/vinbigdata-chest-xray-abnormalities-detection/leaderboard) (401st of 1277).
 
