@@ -102,7 +102,6 @@ def post():
       else:
         result['original'] = encode_image(image.copy())
 
-      torch.cpu.empty_cache()
     return render_template('upload.html', result=result)
   else:
     return redirect(url_for('upload'))
