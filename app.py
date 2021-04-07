@@ -80,7 +80,6 @@ def post():
       image = Image.open(temp.name).convert('RGB')
       
       image = asarray(image)
-      image= cv2.resize(image,(2748,2393))
       outputs = predictor(image)
       w, h, _ =image.shape
       im_size=700
