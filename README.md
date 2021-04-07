@@ -1,6 +1,7 @@
 # [X-Ray disease detection web app](http://xray.lgoyeau.com/)
 
-http://xray.lgoyeau.com/ (Please contacte me if the website is not loading: larry.goyeau@gmail.com)
+http://xray.lgoyeau.com/ 
+(Please contacte me if the website is not loading: larry.goyeau@gmail.com)
 
 This app is based on the method that I used to get my position in the Kaggel [competition for disease detection on X-ray images](https://www.kaggle.com/c/vinbigdata-chest-xray-abnormalities-detection/leaderboard) (375st of 1277).
 
