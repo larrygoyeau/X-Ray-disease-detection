@@ -2,35 +2,40 @@
 <div id="info" >
     <p>This app can detect 14 different diseases with their bounding boxes:</p>
     <ul>
-        <input type="checkbox" name="Aortic" id="Aortic" checked="checked" onclick="boxes_draw()">
-        <label for="Aortic"> Aortic enlargement</label><br>
-        <input type="checkbox" name="Atelectasis" id="Atelectasis" checked="checked">
+        <input type="checkbox" name="Aortic enlargement" id="Aortic enlargement" checked="checked" onclick="boxes_draw()">
+        <label for="Aortic enlargement"> Aortic enlargement</label><br>
+        <input type="checkbox" name="Atelectasis" id="Atelectasis" checked="checked" onclick="boxes_draw()">
         <label for="Atelectasis"> Atelectasis</label><br>
-        <input type="checkbox" name="Calcification" id="Calcification" checked="checked">
+        <input type="checkbox" name="Calcification" id="Calcification" checked="checked" onclick="boxes_draw()">
         <label for="Calcification"> Calcification</label><br>
-        <input type="checkbox" name="Cardiomegaly" id="Cardiomegaly" checked="checked">
+        <input type="checkbox" name="Cardiomegaly" id="Cardiomegaly" checked="checked" onclick="boxes_draw()">
         <label for="Cardiomegaly"> Cardiomegaly</label><br>
-        <input type="checkbox" name="Consolidation" id="Consolidation" checked="checked">
+        <input type="checkbox" name="Consolidation" id="Consolidation" checked="checked" onclick="boxes_draw()">
         <label for="Consolidation"> Consolidation</label><br>
-        <input type="checkbox" name="ILD" id="ILD" checked="checked">
+        <input type="checkbox" name="ILD" id="ILD" checked="checked" onclick="boxes_draw()">
         <label for="ILD"> ILD</label><br>
-        <input type="checkbox" name="Infiltration" id="Infiltration" checked="checked">
+        <input type="checkbox" name="Infiltration" id="Infiltration" checked="checked" onclick="boxes_draw()">
         <label for="Infiltration"> Infiltration</label><br>
-        <input type="checkbox" name="Lung" id="Lung" checked="checked">
-        <label for="Lung"> Lung Opacity</label><br>
-        <input type="checkbox" name="Nodule" id="Nodule" checked="checked">
-        <label for="Nodule"> Nodule/Mass</label><br>
-        <input type="checkbox" name="Other" id="Other" checked="checked">
-        <label for="Other"> Other lesion</label><br>
-        <input type="checkbox" name="effusion" id="effusion" checked="checked">
-        <label for="effusion"> Pleural effusion</label><br>
-        <input type="checkbox" name="thickening" id="thickening" checked="checked">
-        <label for="thickening"> Pleural thickening</label><br>
-        <input type="checkbox" name="Pneumothorax" id="Pneumothorax" checked="checked">
+        <input type="checkbox" name="Lung Opacity" id="Lung Opacity" checked="checked" onclick="boxes_draw()">
+        <label for="Lung Opacity"> Lung Opacity</label><br>
+        <input type="checkbox" name="Nodule/Mass" id="Nodule/Mass" checked="checked" onclick="boxes_draw()">
+        <label for="Nodule/Mass"> Nodule/Mass</label><br>
+        <input type="checkbox" name="Other lesion" id="Other lesion" checked="checked" onclick="boxes_draw()">
+        <label for="Other lesion"> Other lesion</label><br>
+        <input type="checkbox" name="Pleural effusion" id="Pleural effusion" checked="checked" onclick="boxes_draw()">
+        <label for="Pleural effusion"> Pleural effusion</label><br>
+        <input type="checkbox" name="Pleural thickening" id="Pleural thickening" checked="checked" onclick="boxes_draw()">
+        <label for="Pleural thickening"> Pleural thickening</label><br>
+        <input type="checkbox" name="Pneumothorax" id="Pneumothorax" checked="checked" onclick="boxes_draw()">
         <label for="Pneumothorax"> Pneumothorax</label><br>
-        <input type="checkbox" name="fibrosis" id="fibrosis" checked="checked">
-        <label for="fibrosis"> Pulmonary fibrosis</label><br>
+        <input type="checkbox" name="Pulmonary fibrosis" id="Pulmonary fibrosis" checked="checked" onclick="boxes_draw()">
+        <label for="Pulmonary fibrosis"> Pulmonary fibrosis</label><br>
     </ul>
+
+    <div class="slidecontainer">
+        <p>Probability threshold: <span id="demo"></span>%</p>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" onchange="boxes_draw()">
+    </div>
     <p>The source code and its decritpion are available on <a href="https://github.com/larrygoyeau/X-Ray-disease-detection" target="_blank">Github</a></p>
 </div>
 

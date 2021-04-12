@@ -100,6 +100,7 @@ def post():
         result['original'] = encode_image(image.copy())
         result['boxes'] = bboxes
         result['labels'] = [X_ray_metadata[l] for l in outputs['instances'].pred_classes]
+        result['scores'] = [int(s*100) for s in outputs['instances'].scores]
 
     return render_template('upload.html', result=result)
   else:
