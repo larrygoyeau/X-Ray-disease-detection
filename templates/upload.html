@@ -56,12 +56,71 @@
 
     <div id="result">
       {% if result|length > 0 and not ('File' in result['original'] or 'disease' in result['original']) %}
-        <div><img id="photo" src="{{ result['original'] }}" align="left" hspace="15" vspace="15" width="600" height="600"></div>
+        <div><img id="photo" src="{{ result['original'] }}"></div>
+
         {{render_field()}}
+        <canvas id="myCanvas" align="left" hspace="15" vspace="15" width="600" height="600" ></canvas>
         <script>
           document.getElementById("info").style.position="absolute"
           document.getElementById("info").style.left="650px"
         </script>
+
+        <script>
+          function boxes_draw() {
+            var c=document.getElementById("myCanvas");
+            var ctx=c.getContext("2d");
+            var img=document.getElementById("photo");  
+            img.parentNode.removeChild(img);
+            ctx.drawImage(img,0,0,600,600);  
+            var canvas = document.getElementById('myCanvas');
+            var context = canvas.getContext('2d');
+            var labels = "{{ result['labels'] }}"
+            labels=labels.split(",")
+            var boxes = "{{ result['boxes'] }}"
+            boxes=boxes.split("tensor")
+            color_map={
+              'Aortic enlargement': 'red',
+              'Atelectasis': 'green',
+              'Calcification': 'yellow',
+              'Cardiomegaly': 'black',
+              'Consolidation': 'brown',
+              'ILD': 'blue',
+              'Infiltration': 'purple',
+              'Lung Opacity': 'orange',
+              'Nodule/Mass': '#669999',
+              'Other lesion': '#666633',
+              'Pleural effusion': '#666633',
+              'Pleural thickening': '#999966',
+              'Pneumothorax': '#cc6699',
+              'Pulmonary fibrosis': '#993333',
+            }
+
+            for (i=0; i< labels.length; i++){
+              var checkBox = document.getElementById("Aortic");
+              if (checkBox.checked == true){
+                context.beginPath();
+                var x_min= parseInt(boxes[1+i*4].match(/(\d+)/))
+                var y_min= parseInt(boxes[2+i*4].match(/(\d+)/))
+                context.rect(x_min, y_min, parseInt(boxes[3+i*4].match(/(\d+)/))-x_min, parseInt(boxes[4+i*4].match(/(\d+)/))-y_min);
+                context.lineWidth = 3;
+                context.strokeStyle = color_map[labels[i].replace('[','').replace(']','').slice(5, -5).replace(';','')];
+                context.stroke();
+                context.font = "15pt serif";
+                context.fillStyle = "black";
+                var txt=labels[i].replace('[','').replace(']','').slice(5, -5).replace(';','')
+                var width = context.measureText(txt).width;
+                context.fillRect(x_min, y_min-10, width, 20);
+                context.fillStyle = "white";
+                context.fillText(txt, x_min, y_min)
+              }
+            }
+          }
+
+          window.onload = function() {
+            boxes_draw()
+          }
+        </script>
+
       {% elif 'File extension should be:' in result['original'] %}
         <h1>{{ result['original'] }}</h1>
         {{render_field()}}

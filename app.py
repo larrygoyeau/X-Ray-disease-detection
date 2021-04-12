@@ -1,9 +1,12 @@
+for element in dir():
+    if element[0:2] != "__":
+        del globals()[element]
+
 from flask import Flask, request, redirect, url_for, render_template
 from werkzeug.datastructures import CombinedMultiDict
 from wtforms import Form, ValidationError
 from flask_wtf.file import FileField
 import tempfile
-import os
 import io
 import base64
 from PIL import Image
@@ -16,6 +19,7 @@ from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 from visualizer import Visualizer, ColorMode
 from torch import torch
+import os
 
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
@@ -29,22 +33,22 @@ cfg.MODEL.DEVICE="cpu"
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.1   # set a custom testing threshold
 predictor = DefaultPredictor(cfg)
 
-MetadataCatalog.get("vinbigdata").set(thing_classes=['Aortic enlargement',
-                                                           'Atelectasis',
-                                                           'Calcification',
-                                                           'Cardiomegaly',
-                                                           'Consolidation',
-                                                           'ILD',
-                                                           'Infiltration',
-                                                           'Lung Opacity',
-                                                           'Nodule/Mass',
-                                                           'Other lesion',
-                                                           'Pleural effusion',
-                                                           'Pleural thickening',
-                                                           'Pneumothorax',
-                                                           'Pulmonary fibrosis',
-                                                           'No finding'])
-X_ray_metadata = MetadataCatalog.get("vinbigdata")
+X_ray_metadata = [
+  'Aortic enlargement',
+  'Atelectasis',
+  'Calcification',
+  'Cardiomegaly',
+  'Consolidation',
+  'ILD',
+  'Infiltration',
+  'Lung Opacity',
+  'Nodule/Mass',
+  'Other lesion',
+  'Pleural effusion',
+  'Pleural thickening',
+  'Pneumothorax',
+  'Pulmonary fibrosis',
+  'No finding']
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -80,19 +84,13 @@ def post():
       image = Image.open(temp.name).convert('RGB')
       
       image = asarray(image)
+      image= cv2.resize(image,(2748,2393))
       outputs = predictor(image)
       w, h, _ =image.shape
-      im_size=700
+      im_size=600
       bboxes=outputs['instances'].pred_boxes.tensor
-      outputs['instances'].pred_boxes.tensor=torch.tensor([[box[0]/h, box[1]/w, box[2]/h, box[3]/w] for box in bboxes], device='cpu')*im_size
+      bboxes=[[box[0]*im_size/h, box[1]*im_size/w, box[2]*im_size/h, box[3]*im_size/w] for box in bboxes]
       image=cv2.resize(image,(im_size,im_size))
-      v = Visualizer(image[:, :, ::-1],
-                   metadata=X_ray_metadata, 
-                   scale=0.7, 
-                   instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
-                   )
-      v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-      image=v.get_image()[:, :, ::-1]
       image=Image.fromarray(image, 'RGB')
 
       result = {}
@@ -100,6 +98,8 @@ def post():
         result['original']='No disease detected'
       else:
         result['original'] = encode_image(image.copy())
+        result['boxes'] = bboxes
+        result['labels'] = [X_ray_metadata[l] for l in outputs['instances'].pred_classes]
 
     return render_template('upload.html', result=result)
   else:
