@@ -30,7 +30,7 @@ cfg.TEST.AUG.FLIP=False
 cfg.MODEL.WEIGHTS='/opt/model_final.pth'
 
 cfg.MODEL.DEVICE="cpu"
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.1   # set a custom testing threshold
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.06   # set a custom testing threshold
 predictor = DefaultPredictor(cfg)
 
 X_ray_metadata = [
