@@ -5,9 +5,9 @@ WORKDIR /opt
 COPY requirements.txt ./
 COPY model.py ./
 
-RUN pip install --no-cache-dir torch==1.8.1 torchvision==0.9.1
-RUN pip install --no-cache-dir -r requirements.txt
-RUN python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.8/index.html
+RUN pip3 install --no-cache-dir torch==1.11.0 torchvision==0.12.0
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 RUN python model.py
 
 COPY . .

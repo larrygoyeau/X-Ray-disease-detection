@@ -1,5 +1,6 @@
+gdown
 flask
 Flask_WTF
 googledrivedownloader
-opencv-python-headless==4.5.1.48
+opencv-python-headless
 WTForms==2.2.1
