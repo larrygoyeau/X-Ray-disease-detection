@@ -23,9 +23,9 @@ docker build -t x-ray-disease-detection .
 ### Running the app
 
 ```
-docker run -p 5000:5000 x-ray-disease-detection
+docker run -p 80:8080 x-ray-disease-detection
 ```
-And visit http://localhost:5000
+And visit http://localhost:80
 
 ## Souces
 
